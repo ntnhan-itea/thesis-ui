@@ -1,4 +1,5 @@
 export const SET_USER = "SET_USER";
+export const SET_ALL_USERS = "SET_ALL_USERS";
 export const SET_TEAMS = "SET_TEAMS";
 export const SET_MEMBERS = "SET_MEMBERS";
 export const SET_LOADING_COUNT = "SET_LOADING_COUNT";
