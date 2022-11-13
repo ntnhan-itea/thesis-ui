@@ -2,21 +2,15 @@ import {
     getAllEntries,
     login,
     getAllUsers,
-} from '../services/registrationService';
+} from '../services/ThesisService';
+
 import { SET_USER, SET_ALL_USERS, SET_DIALOG_MESSAGE } from './mutation-types';
 
 function showErrorMessage(commit, error) {
     console.error({ error });
     const message = error?.response?.data?.message || 'Unknown error message';
     console.error({ message });
-    // alert(message);
-
-    // const dialogMessage = {
-    //     message: message,
-    //     isError: true,
-    // };
-
-    // commit(SET_DIALOG_MESSAGE, { dialogMessage });
+  
     showDialogMessage(commit, message, true);
 }
 
