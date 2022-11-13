@@ -1,10 +1,7 @@
 <template>
     <div>
-        <v-container>
-            <data-table />
-        </v-container>
-
-        <!-- <v-snackbar
+        <router-view></router-view>
+        <v-snackbar
             style="z-index: 9999; text-align: center"
             :color="responseSnackBarColor"
             top
@@ -15,19 +12,16 @@
             :multi-line="true"
         >
             {{ responseSnackBarMessage }}
-        </v-snackbar> -->
+        </v-snackbar>
     </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
-import DataTable from './DataTable.vue';
 
 export default {
-    name: 'HomePage',
-    components: {
-        DataTable,
-    },
+    name: 'MasterPage',
+    components: {},
 
     data: () => ({
         responseSnackBarColor: 'green',
@@ -41,19 +35,18 @@ export default {
 
     watch: {
         getDialogMessage() {
-            console.log("this.getDialogMessage: ", this.getDialogMessage);
-            this.responseSnackBarMessage = this.getDialogMessage?.message;
-            if(this.responseSnackBarMessage) {
-                this.isShowDialog = true;
-                const isError = this.getDialogMessage?.isError;
-                if(isError) {
+            this.responseSnackBarMessage =
+                this.getDialogMessage.message || null;
+            if (this.responseSnackBarMessage) {
+                const isError = this.getDialogMessage.isError || false;
+                if (isError) {
                     this.responseSnackBarColor = 'red';
                 } else {
                     this.responseSnackBarColor = 'green';
                 }
+                this.isShowDialog = true;
             }
         },
-
     },
 
     computed: {

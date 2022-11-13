@@ -12,14 +12,14 @@
                         </v-alert>
                         <v-card-text>
                             <v-text-field
-                                v-model="username"
+                                v-model="user.username"
                                 name="login"
                                 label="Login"
                                 type="text"
                             ></v-text-field>
 
                             <v-text-field
-                                v-model="password"
+                                v-model="user.password"
                                 name="password"
                                 label="Password"
                                 type="password"
@@ -52,43 +52,61 @@ import { mapGetters } from 'vuex';
 
 export default {
     name: 'Login',
+
     data: () => ({
-        username: '',
-        password: '',
+        user: {
+            username: '',
+            password: '',
+        },
         error: false,
     }),
-    mounted() {},
 
     computed: {
         ...mapGetters({
             getUser: 'getUser',
         }),
     },
+
+    created() {},
+
+    mounted() {
+        // const routerName = this.$router?.name;
+        // console.log({ routerName });
+        // if (
+        //     this.getUser &&
+        //     (!routerName || (routerName !== 'Home' && routerName === 'Login'))
+        // ) {
+        //     this.$router.push({ name: 'Home' });
+        // }
+    },
+
     watch: {
         getUser() {
-            if (this.getUser && this.getUser.username) {
-                // if (this.$router.name == 'Login') {
-                this.$router.push({ name: 'Home' });
-                // }
-            }
+            // if (this.getUser && this.getUser.username) {
+            //     if (this.$router.name === 'Login') {
+            //         this.$router.push({ name: 'Home' });
+            //     }
+            // }
         },
     },
 
     methods: {
         login() {
-            console.log('click log-in button');
-            console.log('username: ', this.username);
-            console.log('password: ', this.password);
+            // console.log('click log-in button');
+            // console.log('username: ', this.user.username);
+            // console.log('password: ', this.user.password);
 
-            this.$store.dispatch('loginAsync', {
-                user: {
-                    username: this.username,
-                    password: this.password,
-                },
-            });
-            // if (this.$router.name == 'Login') {
-                // this.$router.push({ name: 'Home' });
-            // }
+            this.$store
+                .dispatch('loginAsync', {
+                    user: this.user,
+                })
+                .then(() => {
+                    const routerName = this.$router?.name;
+                    if (this.getUser) {
+                        if ( routerName !== 'Home')
+                            this.$router.push({ name: 'Home' });
+                    }
+                });
         },
     },
 };

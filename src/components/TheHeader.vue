@@ -1,7 +1,7 @@
 <template>
     <div
         class="application-nav-bar header"
-        v-if="this.getUser"
+        v-if="this.user"
     >
         <div class="d-flex">
             <v-spacer></v-spacer>
@@ -24,6 +24,12 @@ export default {
             user: null,
         };
     },
+    
+    computed: {
+        ...mapGetters({
+            getUser: 'getUser',
+        }),
+    },
 
     created() {
         // const userLocal = localStorage.getItem('userLogin');
@@ -31,16 +37,12 @@ export default {
         // this.fullName = this.user ? this.user.fullName : 'UnKnown person';
     },
 
-    computed: {
-        ...mapGetters({
-            getUser: 'getUser',
-        }),
-    },
 
     watch: {
         getUser() {
-            if (this.getUser && this.getUser.fullName) {
-                this.fullName = this.getUser.fullName;
+            this.user = this.getUser;
+            if (this.user && this.user.fullName) {
+                this.fullName = this.user.fullName;
             } else {
                 this.fullName = "Unknown person"
             }
@@ -49,10 +51,11 @@ export default {
     },
 
     mounted() {
-        if (this.getUser && this.getUser.fullName) {
-            this.fullName = this.getUser.fullName;
+        this.user = this.getUser;
+        if (this.user && this.user.fullName) {
+            this.fullName = this.user.fullName;
         }
-        // console.log(this.getUser);
+        // console.log(this.user);
     },
 
     methods: {
@@ -65,8 +68,9 @@ export default {
             window.history.replaceState(null, '', '/');
             localStorage.setItem('userLogin', null);
             this.$store.commit(SET_USER, { user: null });
+            this.user = null;
 
-            if (this.$route.name != 'Login') {
+            if (this.$route.name !== 'Login') {
                 this.$router.push({ name: 'Login' });
             }
         },

@@ -3,13 +3,30 @@ import {
     login,
     getAllUsers,
 } from '../services/registrationService';
-import { SET_USER, SET_ALL_USERS } from './mutation-types';
+import { SET_USER, SET_ALL_USERS, SET_DIALOG_MESSAGE } from './mutation-types';
 
-function showErrorMessage(error) {
+function showErrorMessage(commit, error) {
     console.error({ error });
     const message = error?.response?.data?.message || 'Unknown error message';
-    console.log({ message });
-    alert(message);
+    console.error({ message });
+    // alert(message);
+
+    // const dialogMessage = {
+    //     message: message,
+    //     isError: true,
+    // };
+
+    // commit(SET_DIALOG_MESSAGE, { dialogMessage });
+    showDialogMessage(commit, message, true);
+}
+
+function showDialogMessage(commit, message, isError) {
+    const dialogMessage = {
+        message: message,
+        isError: isError,
+    };
+
+    commit(SET_DIALOG_MESSAGE, { dialogMessage });
 }
 
 export const actions = {
@@ -26,12 +43,15 @@ export const actions = {
     async loginAsync({ commit }, payload) {
         try {
             const response = await login(payload.user);
-            const user = response.data;
-            const userJson = JSON.stringify(user);
-            commit(SET_USER, { user: JSON.parse(userJson) });
+            const userData = response?.data;
+            const userJson = JSON.stringify(userData);
+            const user = JSON.parse(userJson);
+
+            commit(SET_USER, { user: user });
             localStorage.setItem('userLogin', userJson);
+            showDialogMessage(commit, "Log in successfully", false);
         } catch (error) {
-            showErrorMessage(error);
+            showErrorMessage(commit, error);
         }
     },
 
@@ -41,7 +61,7 @@ export const actions = {
             const users = response.data;
             commit(SET_ALL_USERS, { users: users });
         } catch (error) {
-            showErrorMessage(error);
+            showErrorMessage(commit, error);
             // console.error({ error });
             // const message =
             //     error?.response?.data?.message || 'Unknown error message';

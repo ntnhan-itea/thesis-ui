@@ -2,25 +2,35 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import HomePage from '../components/HomePage';
 import Login from '../components/Login';
+import MasterPage from '../components/MasterPage';
 
 Vue.use(VueRouter);
 
 const routes = [
     {
         path: '/',
-        name: 'Home',
-        component: HomePage,
+        name: 'MasterPage',
+        component: MasterPage,
+        children: [
+            {
+                path: '/login',
+                name: 'Login',
+                component: Login,
+            },
+            {
+                path: '/home',
+                name: 'Home',
+                component: HomePage,
+            },
+        ],
     },
-    {
-        path: '/login',
-        name: 'Login',
-        component: Login,
-    },
-    {
-        path: '/404',
-        name: 'Login',
-        component: Login,
-    },
+
+    // {
+    //     path: '/404',
+    //     name: 'Login',
+    //     component: Login,
+    // },
+
     // {
     //   path: '/about',
     //   name: 'About',
@@ -42,13 +52,21 @@ router.beforeEach((to, from, next) => {
         ? JSON.parse(localStorage.getItem('userLogin'))
         : null;
 
-        console.log({localStorage_userLogin});
+    // console.log({ localStorage_userLogin });
+
+    const username = localStorage_userLogin
+        ? localStorage_userLogin.username
+        : null;
+
+    // console.log({ username });
+
+    // console.log("to path in beforEach: ", to.path);
 
     if (to.path != '/login') {
         if (!localStorage_userLogin) {
             next({ path: '/login' });
         } else {
-            if (localStorage_userLogin.username) {
+            if (username) {
                 next();
             } else {
                 alert('SOMETHING WRONG!');
@@ -56,7 +74,17 @@ router.beforeEach((to, from, next) => {
             }
         }
     } else {
-        next();
+        if (username) {
+            next({ path: '/home' });
+        } else {
+            next();
+        }
+
+        // if(to.path) {
+        //     next();
+        // } else {
+        //     next({ path: '/' });
+        // }
     }
 });
 
