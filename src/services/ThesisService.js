@@ -18,6 +18,16 @@ export function login(user) {
   });
 }
 
+export function signupAdminUser(user) {
+  let url = '/admin';
+
+  return axios({
+    method: 'POST',
+    url: url,
+    data: JSON.stringify(user),
+  });
+}
+
 export function getAllUsers() {
   let url = '/user/get-all';
 

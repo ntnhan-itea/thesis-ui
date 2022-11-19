@@ -2,15 +2,16 @@ import {
     getAllEntries,
     login,
     getAllUsers,
-} from '../services/ThesisService';
+    signupAdminUser,
+} from "../services/ThesisService";
 
-import { SET_USER, SET_ALL_USERS, SET_DIALOG_MESSAGE } from './mutation-types';
+import { SET_USER, SET_ALL_USERS, SET_DIALOG_MESSAGE } from "./mutation-types";
 
 function showErrorMessage(commit, error) {
     console.error({ error });
-    const message = error?.response?.data?.message || 'Unknown error message';
+    const message = error?.response?.data?.message || "Unknown error message";
     console.error({ message });
-  
+
     showDialogMessage(commit, message, true);
 }
 
@@ -42,8 +43,26 @@ export const actions = {
             const user = JSON.parse(userJson);
 
             commit(SET_USER, { user: user });
-            localStorage.setItem('userLogin', userJson);
+            localStorage.setItem("userLogin", userJson);
             showDialogMessage(commit, "Log in successfully", false);
+        } catch (error) {
+            showErrorMessage(commit, error);
+        }
+    },
+
+    async signupAdminUserAsync({ commit }, user) {
+        try {
+            const response = await signupAdminUser(user);
+            const userCreated = response.data;
+
+            const userJson = JSON.stringify(userCreated);
+            const userObject = JSON.parse(userJson);
+            commit(SET_USER, { user: userObject });
+            localStorage.setItem("userLogin", userJson);
+
+            const message =
+                "Registered [" + userCreated.username + "] successfully";
+            showDialogMessage(commit, message, false);
         } catch (error) {
             showErrorMessage(commit, error);
         }
@@ -56,11 +75,6 @@ export const actions = {
             commit(SET_ALL_USERS, { users: users });
         } catch (error) {
             showErrorMessage(commit, error);
-            // console.error({ error });
-            // const message =
-            //     error?.response?.data?.message || 'Unknown error message';
-            // console.log({ message });
-            // alert(message);
         }
     },
 };

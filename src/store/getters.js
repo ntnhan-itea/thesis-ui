@@ -21,9 +21,13 @@ function showDialogMessage(message, isError) {
 
 export const getters = {
     getUser: (state) => {
-        const userLocalStorage = jsonParse(localStorage.getItem('userLogin'));
-        const user = state?.user;
-        return user ? user : userLocalStorage;
+        try {
+            const userLocalStorage = jsonParse(localStorage.getItem('userLogin'));
+            const user = state?.user;
+            return user ? user : userLocalStorage;
+        } catch (error) {
+            return null;
+        }
     },
     getUsers: (state) => {
         return state.users;

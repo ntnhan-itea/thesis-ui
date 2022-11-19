@@ -1,25 +1,25 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import HomePage from '../components/HomePage';
-import Login from '../components/Login';
-import MasterPage from '../components/MasterPage';
+import Vue from "vue";
+import VueRouter from "vue-router";
+import HomePage from "../components/HomePage";
+import Login from "../components/Login";
+import MasterPage from "../components/MasterPage";
 
 Vue.use(VueRouter);
 
 const routes = [
     {
-        path: '/',
-        name: 'MasterPage',
+        path: "/",
+        name: "MasterPage",
         component: MasterPage,
         children: [
             {
-                path: '/login',
-                name: 'Login',
+                path: "/login",
+                name: "Login",
                 component: Login,
             },
             {
-                path: '/home',
-                name: 'Home',
+                path: "/home",
+                name: "Home",
                 component: HomePage,
             },
         ],
@@ -42,7 +42,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: "history",
     base: process.env.BASE_URL,
     routes,
 });
@@ -51,7 +51,7 @@ router.beforeEach((to, from, next) => {
     let localStorage_userLogin = null;
 
     try {
-        localStorage_userLogin = JSON.parse(localStorage.getItem('userLogin'));
+        localStorage_userLogin = JSON.parse(localStorage.getItem("userLogin"));
     } catch (error) {
         localStorage_userLogin = null;
     }
@@ -60,24 +60,21 @@ router.beforeEach((to, from, next) => {
         ? localStorage_userLogin.username
         : null;
 
-    if (to.path != '/login') {
-        if (!localStorage_userLogin) {
-            next({ path: '/login' });
+    if (to.path != "/login") {
+        if (!username) {
+            next({ path: "/login" });
         } else {
             if (username) {
-                if (to.path == '/') {
-                    next({ path: '/home' });
+                if (to.path == "/") {
+                    next({ path: "/home" });
                 } else {
                     next();
                 }
-            } else {
-                alert('SOMETHING WRONG!');
-                // next({ path: '/login' });
             }
         }
     } else {
         if (username) {
-            next({ path: '/home' });
+            next({ path: "/home" });
         } else {
             next();
         }

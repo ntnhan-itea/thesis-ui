@@ -3,7 +3,8 @@
         <v-layout align-center justify-center>
             <v-flex xs12 sm8 md8>
                 <v-form>
-                    <v-card class="elevation-12">
+                    <!-- Login -->
+                    <v-card class="elevation-12" v-if="this.isLoginMode">
                         <v-toolbar dark color="blue">
                             <v-toolbar-title>Login form</v-toolbar-title>
                         </v-toolbar>
@@ -13,8 +14,8 @@
                         <v-card-text>
                             <v-text-field
                                 v-model="user.username"
-                                name="login"
-                                label="Login"
+                                name="username"
+                                label="Username"
                                 type="text"
                             ></v-text-field>
 
@@ -29,9 +30,9 @@
                         <v-card-actions>
                             <v-btn
                                 rounded
-                                color="indigo"
+                                color="grey"
                                 dark
-                                @click.prevent="signup()"
+                                @click.prevent="changeToSignupMode()"
                             >
                                 Sign up
                             </v-btn>
@@ -46,13 +47,81 @@
                             </v-btn>
                         </v-card-actions>
                     </v-card>
+                    <!-- End Login -->
+
+                    <!-- Sign up -->
+                    <v-card class="elevation-12" v-if="!this.isLoginMode">
+                        <v-toolbar dark color="blue">
+                            <v-toolbar-title>Register form</v-toolbar-title>
+                        </v-toolbar>
+                        <v-alert color="error" :value="error" icon="close">
+                            The username or the password are incorrect.
+                        </v-alert>
+                        <v-card-text>
+                            <v-text-field
+                                v-model="user.username"
+                                name="username"
+                                label="Username"
+                                type="text"
+                            ></v-text-field>
+
+                            <v-text-field
+                                v-model="user.password"
+                                name="password"
+                                label="Password"
+                                type="password"
+                            ></v-text-field>
+
+                            <v-text-field
+                                v-model="user.repeatPassword"
+                                name="repeatPassword"
+                                label="Repeat password"
+                                type="password"
+                            ></v-text-field>
+
+                            <v-text-field
+                                v-model="user.phoneNumber"
+                                name="phoneNumber"
+                                label="Phone number"
+                                type="text"
+                            ></v-text-field>
+
+                            <v-text-field
+                                v-model="user.fullName"
+                                name="fullName"
+                                label="Full Name"
+                                type="text"
+                            ></v-text-field>
+                        </v-card-text>
+                        <v-divider light></v-divider>
+                        <v-card-actions>
+                            <v-btn
+                                rounded
+                                color="grey"
+                                dark
+                                @click.prevent="changeToSignInMode()"
+                            >
+                                Login
+                            </v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                                rounded
+                                color="primary"
+                                dark
+                                @click.prevent="signup()"
+                            >
+                                Sign up
+                            </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                    <!-- End sign up -->
                 </v-form>
             </v-flex>
         </v-layout>
     </v-container>
 </template>
 
-<script>
+<script scoped>
 import { mapGetters } from "vuex";
 import {
     SET_OPEN_DIALOG_CONFIRM_SIGN_UP,
@@ -66,8 +135,12 @@ export default {
         user: {
             username: "",
             password: "",
+            repeatPassword: "",
+            phoneNumber: "",
+            fullName:"",
         },
         error: false,
+        isLoginMode: true,
     }),
 
     computed: {
@@ -101,6 +174,19 @@ export default {
     },
 
     methods: {
+        handleRouting: function (e) {
+            if (e.target.dataset.routing == this.$route.name) return;
+            this.$router.push({ name: e.target.dataset.routing });
+        },
+
+        changeToSignupMode() {
+            this.isLoginMode = false;
+        },
+
+        changeToSignInMode() {
+            this.isLoginMode = true;
+        },
+
         login() {
             // console.log('click log-in button');
             // console.log('username: ', this.user.username);
@@ -127,11 +213,30 @@ export default {
                 return;
             }
 
+            if (user.password !== user.repeatPassword) {
+                this.showDialogMessage("The repeat pass not match", true);
+                return;
+            }
+
+            if (!this.validatePhoneNumber(user.phoneNumber)) {
+                this.showDialogMessage("Invalid phone number", true);
+                return;
+            }
+            
             this.$root.$emit("OpenSignupConfirm", user);
 
             this.$store.commit(SET_OPEN_DIALOG_CONFIRM_SIGN_UP, {
                 isOpenDialogSignup: true,
             });
+        },
+
+        validatePhoneNumber(phoneNumber) {
+            const phoneNumberPattern = "^\\d{10}$";
+            if (phoneNumber.match(phoneNumberPattern)) {
+                return true;
+            } else {
+                return false;
+            }
         },
 
         parseToObject(object) {

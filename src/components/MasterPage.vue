@@ -67,7 +67,7 @@ export default {
             username: null,
             password: null,
         },
-        newUser: {
+        accountRegister: {
             username: null,
             password: null,
         },
@@ -109,9 +109,11 @@ export default {
 
     mounted() {
         this.$root.$on("OpenSignupConfirm", (user) => {
-            this.newUser = this.getIsValidAccount(user);
-            this.newUsername = this.newUser?.username || "Wrong username";
-            this.newPassword = this.newUser?.password || "Wrong password";
+            this.accountRegister = this.getIsValidAccount(user);
+            this.newUsername =
+                this.accountRegister?.username || "Wrong username";
+            this.newPassword =
+                this.accountRegister?.password || "Wrong password";
         });
     },
 
@@ -123,9 +125,21 @@ export default {
         },
 
         signupAccount() {
-            console.log("Starting signup new account ...");
-            this.closeConfirmDialog();
-            console.log("Ended signup new account!");
+            this.$store
+                .dispatch("signupAdminUserAsync", this.accountRegister)
+                .then(() => {
+                    this.closeConfirmDialog();
+                    const routerName = this.$router?.name;
+                    if (this.getUser) {
+                        if (routerName !== "Home")
+                            this.$router.push({ name: "Home" });
+                    }
+                });
+
+            // console.log("Starting signup new account ...");
+
+            // this.closeConfirmDialog();
+            // console.log("Ended signup new account!");
         },
 
         parseToObject(object) {
