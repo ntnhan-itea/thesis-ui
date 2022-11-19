@@ -1,8 +1,21 @@
 <template>
-    <div
-        class="application-nav-bar header"
-        v-if="this.user"
-    >
+    <div class="application-nav-bar header d-flex" v-if="this.user">
+        <v-tabs align-with-title>
+            <v-tab
+                ref="pendingBtn"
+                @click="(e) => handleRouting(e)"
+                data-routing="Home"
+                style="text-transform: capitalize !important"
+                >Home</v-tab
+            >
+            <v-tab
+                ref="calendarBtn"
+                @click="(e) => handleRouting(e)"
+                data-routing="Map"
+                style="text-transform: capitalize !important"
+                >Google map</v-tab
+            >
+        </v-tabs>
         <div class="d-flex">
             <v-spacer></v-spacer>
             <div class="navbar-item">Hi {{ this.fullName }},</div>
@@ -13,7 +26,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import {SET_USER} from "../store/mutation-types.js";
+import { SET_USER } from '../store/mutation-types.js';
 
 export default {
     name: 'TheHeader',
@@ -24,7 +37,7 @@ export default {
             user: null,
         };
     },
-    
+
     computed: {
         ...mapGetters({
             getUser: 'getUser',
@@ -37,17 +50,15 @@ export default {
         // this.fullName = this.user ? this.user.fullName : 'UnKnown person';
     },
 
-
     watch: {
         getUser() {
             this.user = this.getUser;
             if (this.user && this.user.fullName) {
                 this.fullName = this.user.fullName;
             } else {
-                this.fullName = "Unknown person"
+                this.fullName = 'Unknown person';
             }
         },
-
     },
 
     mounted() {
@@ -103,7 +114,7 @@ $paddingHorizontal: 0.438rem
   display: flex
   align-items: center
   justify-content: flex-start
-  min-width: 65px
+  min-width: 100px
   line-height: 31px
   &
     color: #0492d0

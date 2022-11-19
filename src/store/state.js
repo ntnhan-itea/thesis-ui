@@ -4,5 +4,6 @@ export const state = {
     dialogMessage: {
         message: "",
         isError: false
-    }
+    },
+    isOpenDialogSignup: false,
 };

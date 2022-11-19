@@ -48,26 +48,28 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const localStorage_userLogin = localStorage.getItem('userLogin')
-        ? JSON.parse(localStorage.getItem('userLogin'))
-        : null;
+    let localStorage_userLogin = null;
 
-    // console.log({ localStorage_userLogin });
+    try {
+        localStorage_userLogin = JSON.parse(localStorage.getItem('userLogin'));
+    } catch (error) {
+        localStorage_userLogin = null;
+    }
 
     const username = localStorage_userLogin
         ? localStorage_userLogin.username
         : null;
-
-    // console.log({ username });
-
-    // console.log("to path in beforEach: ", to.path);
 
     if (to.path != '/login') {
         if (!localStorage_userLogin) {
             next({ path: '/login' });
         } else {
             if (username) {
-                next();
+                if (to.path == '/') {
+                    next({ path: '/home' });
+                } else {
+                    next();
+                }
             } else {
                 alert('SOMETHING WRONG!');
                 // next({ path: '/login' });
@@ -79,12 +81,6 @@ router.beforeEach((to, from, next) => {
         } else {
             next();
         }
-
-        // if(to.path) {
-        //     next();
-        // } else {
-        //     next({ path: '/' });
-        // }
     }
 });
 

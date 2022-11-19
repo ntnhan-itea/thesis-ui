@@ -31,6 +31,9 @@ export const getters = {
     getDialogMessage: (state) => {
         return state.dialogMessage;
     },
+    isOpenDialogSignup: (state) => {
+        return state.isOpenDialogSignup;
+    },
     // getUser: () => {
     //     return localStorage.getItem('userLogin') ? JSON.parse(localStorage.getItem('userLogin')) : null;
     // },

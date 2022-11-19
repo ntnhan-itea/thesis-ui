@@ -27,9 +27,14 @@
                         </v-card-text>
                         <v-divider light></v-divider>
                         <v-card-actions>
-                            <v-btn to="/signup" rounded color="indigo" dark
-                                >Sign up</v-btn
+                            <v-btn
+                                rounded
+                                color="indigo"
+                                dark
+                                @click.prevent="signup()"
                             >
+                                Sign up
+                            </v-btn>
                             <v-spacer></v-spacer>
                             <v-btn
                                 rounded
@@ -48,22 +53,27 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
+import {
+    SET_OPEN_DIALOG_CONFIRM_SIGN_UP,
+    SET_DIALOG_MESSAGE,
+} from "../store/mutation-types";
 
 export default {
-    name: 'Login',
+    name: "Login",
 
     data: () => ({
         user: {
-            username: '',
-            password: '',
+            username: "",
+            password: "",
         },
         error: false,
     }),
 
     computed: {
         ...mapGetters({
-            getUser: 'getUser',
+            getUser: "getUser",
+            isOpenDialogSignup: "isOpenDialogSignup",
         }),
     },
 
@@ -97,16 +107,66 @@ export default {
             // console.log('password: ', this.user.password);
 
             this.$store
-                .dispatch('loginAsync', {
+                .dispatch("loginAsync", {
                     user: this.user,
                 })
                 .then(() => {
                     const routerName = this.$router?.name;
                     if (this.getUser) {
-                        if ( routerName !== 'Home')
-                            this.$router.push({ name: 'Home' });
+                        if (routerName !== "Home")
+                            this.$router.push({ name: "Home" });
                     }
                 });
+        },
+
+        signup() {
+            const user = this.getIsValidAccount(this.user);
+
+            if (!user) {
+                this.showDialogMessage("Invalid account to register", true);
+                return;
+            }
+
+            this.$root.$emit("OpenSignupConfirm", user);
+
+            this.$store.commit(SET_OPEN_DIALOG_CONFIRM_SIGN_UP, {
+                isOpenDialogSignup: true,
+            });
+        },
+
+        parseToObject(object) {
+            try {
+                return JSON.parse(JSON.stringify(object));
+            } catch (error) {
+                return null;
+            }
+        },
+
+        getIsValidAccount(account) {
+            const user = this.parseToObject(account);
+            const isValidUsername = this.isNotBlankString(user.username);
+            const isValidPassword = this.isNotBlankString(user.password);
+            const isValidAccount = user && isValidUsername && isValidPassword;
+            return isValidAccount ? user : null;
+        },
+
+        showDialogMessage(message, isError) {
+            const msg = message || "Unknown error message";
+
+            const dialogMessage = {
+                message: msg,
+                isError: isError,
+            };
+
+            this.$store.commit(SET_DIALOG_MESSAGE, { dialogMessage });
+        },
+
+        isNotBlankString(valueString) {
+            try {
+                return valueString && valueString.trim() !== "";
+            } catch (error) {
+                return false;
+            }
         },
     },
 };
