@@ -3,7 +3,8 @@ import {
     SET_ALL_USERS,
     SET_DIALOG_MESSAGE,
     SET_OPEN_DIALOG_CONFIRM_SIGN_UP,
-} from './mutation-types';
+    SET_AO_NUOI,
+} from "./mutation-types";
 
 export const mutations = {
     [SET_USER](state, payload) {
@@ -17,5 +18,8 @@ export const mutations = {
     },
     [SET_OPEN_DIALOG_CONFIRM_SIGN_UP](state, payload) {
         state.isOpenDialogSignup = payload.isOpenDialogSignup;
+    },
+    [SET_AO_NUOI](state, aoNuoi) {
+        state.aoNuoi = aoNuoi;
     },
 };

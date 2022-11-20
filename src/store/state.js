@@ -6,4 +6,5 @@ export const state = {
         isError: false
     },
     isOpenDialogSignup: false,
+    aoNuoi: null,
 };

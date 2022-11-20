@@ -3,9 +3,15 @@ import {
     login,
     getAllUsers,
     signupAdminUser,
+    getAoNuoiById,
 } from "../services/ThesisService";
 
-import { SET_USER, SET_ALL_USERS, SET_DIALOG_MESSAGE } from "./mutation-types";
+import {
+    SET_USER,
+    SET_ALL_USERS,
+    SET_DIALOG_MESSAGE,
+    SET_AO_NUOI,
+} from "./mutation-types";
 
 function showErrorMessage(commit, error) {
     console.error({ error });
@@ -38,9 +44,10 @@ export const actions = {
     async loginAsync({ commit }, payload) {
         try {
             const response = await login(payload.user);
-            const userData = response?.data;
+            let userData = response?.data;
+            userData.password = payload.user.password;
             const userJson = JSON.stringify(userData);
-            const user = JSON.parse(userJson);
+            let user = JSON.parse(userJson);
 
             commit(SET_USER, { user: user });
             localStorage.setItem("userLogin", userJson);
@@ -73,6 +80,19 @@ export const actions = {
             const response = await getAllUsers();
             const users = response.data;
             commit(SET_ALL_USERS, { users: users });
+        } catch (error) {
+            showErrorMessage(commit, error);
+        }
+    },
+
+    async getAoNuoiByIdAsync({ commit }, payload) {
+        try {
+            const response = await getAoNuoiById(
+                payload.aoNuoiId,
+                payload.user,
+            );
+            const aoNuoi = response.data;
+            commit(SET_AO_NUOI, aoNuoi);
         } catch (error) {
             showErrorMessage(commit, error);
         }

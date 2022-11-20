@@ -18,6 +18,16 @@ export function login(user) {
   });
 }
 
+export function getAoNuoiById(aoNuoiId, user) {
+  let url = `/ao-nuoi/get-by-id/${aoNuoiId}`;
+
+  return axios({
+    method: 'POST',
+    url: url,
+    data: JSON.stringify(user),
+  });
+}
+
 export function signupAdminUser(user) {
   let url = '/admin';
 
