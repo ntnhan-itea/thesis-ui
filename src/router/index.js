@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import HomePage from "../components/HomePage";
 import Login from "../components/Login";
 import MasterPage from "../components/MasterPage";
+import Mapbox from "../components/Mapbox";
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
                 path: "/home",
                 name: "Home",
                 component: HomePage,
+            },
+            {
+                path: "/map-box",
+                name: "Mapbox",
+                component: Mapbox,
             },
         ],
     },

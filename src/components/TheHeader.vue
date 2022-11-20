@@ -1,17 +1,17 @@
 <template>
-    <div class="application-nav-bar header d-flex" v-if="this.user">
+    <div class="application-nav-bar header d-flex" v-show="this.user">
         <v-tabs align-with-title>
             <v-tab
-                ref="pendingBtn"
+                ref="btnHome"
                 @click="(e) => handleRouting(e)"
                 data-routing="Home"
                 style="text-transform: capitalize !important"
                 >Home</v-tab
             >
             <v-tab
-                ref="calendarBtn"
+                ref="btnMapbox"
                 @click="(e) => handleRouting(e)"
-                data-routing="Map"
+                data-routing="Mapbox"
                 style="text-transform: capitalize !important"
                 >Google map</v-tab
             >
@@ -25,22 +25,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { SET_USER } from '../store/mutation-types.js';
+import { mapGetters } from "vuex";
+import { SET_USER } from "../store/mutation-types.js";
 
 export default {
-    name: 'TheHeader',
+    name: "TheHeader",
 
     data() {
         return {
-            fullName: 'UnKnown person',
+            fullName: "UnKnown person",
             user: null,
         };
     },
 
     computed: {
         ...mapGetters({
-            getUser: 'getUser',
+            getUser: "getUser",
         }),
     },
 
@@ -56,7 +56,7 @@ export default {
             if (this.user && this.user.fullName) {
                 this.fullName = this.user.fullName;
             } else {
-                this.fullName = 'Unknown person';
+                this.fullName = "Unknown person";
             }
         },
     },
@@ -66,7 +66,14 @@ export default {
         if (this.user && this.user.fullName) {
             this.fullName = this.user.fullName;
         }
-        // console.log(this.user);
+
+        if (this.user) {
+            if (this.$route.name == "Home") {
+                this.$refs.btnHome.$el.click();
+            } else if (this.$route.name == "Mapbox") {
+                this.$refs.btnMapbox.$el.click();
+            }
+        }
     },
 
     methods: {
@@ -76,20 +83,14 @@ export default {
         },
 
         logout: function () {
-            window.history.replaceState(null, '', '/');
-            localStorage.setItem('userLogin', null);
+            window.history.replaceState(null, "", "/");
+            localStorage.setItem("userLogin", null);
             this.$store.commit(SET_USER, { user: null });
             this.user = null;
 
-            if (this.$route.name !== 'Login') {
-                this.$router.push({ name: 'Login' });
+            if (this.$route.name !== "Login") {
+                this.$router.push({ name: "Login" });
             }
-        },
-        handleSwitchCalendar: function () {
-            this.$root.$emit('ViewOption_Calendar');
-        },
-        handleSwitchPendinglist: function () {
-            this.$root.$emit('ViewOption_PendingList');
         },
     },
 };

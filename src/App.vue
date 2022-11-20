@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import TheHeader from './components/TheHeader.vue';
+import TheHeader from "./components/TheHeader.vue";
 
 export default {
-    name: 'App',
+    name: "App",
     components: { TheHeader },
 
     data: () => ({
@@ -21,3 +21,12 @@ export default {
     }),
 };
 </script>
+
+<style scoped lang="css">
+.application-container {
+    width: 100%;
+    min-height: calc(100vh - 61px);
+    position: relative;
+
+}
+</style>
