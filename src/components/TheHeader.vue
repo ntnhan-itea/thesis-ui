@@ -13,7 +13,7 @@
                 @click="(e) => handleRouting(e)"
                 data-routing="Mapbox"
                 style="text-transform: capitalize !important"
-                >Google map</v-tab
+                >Map box</v-tab
             >
         </v-tabs>
         <div class="d-flex">

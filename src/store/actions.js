@@ -4,6 +4,7 @@ import {
     getAllUsers,
     signupAdminUser,
     getAoNuoiById,
+    getVungById,
 } from "../services/ThesisService";
 
 import {
@@ -11,6 +12,7 @@ import {
     SET_ALL_USERS,
     SET_DIALOG_MESSAGE,
     SET_AO_NUOI,
+    SET_VUNG_NUOI,
 } from "./mutation-types";
 
 function showErrorMessage(commit, error) {
@@ -93,6 +95,20 @@ export const actions = {
             );
             const aoNuoi = response.data;
             commit(SET_AO_NUOI, aoNuoi);
+        } catch (error) {
+            showErrorMessage(commit, error);
+        }
+    },
+
+    async getVungNuoiByIdAsync({ commit }, payload) {
+        try {
+            const response = await getVungById(
+                payload.vungNuoiId,
+                payload.user,
+            );
+            const vungNuoi = response.data;
+            console.log({vungNuoi});
+            commit(SET_VUNG_NUOI, vungNuoi);
         } catch (error) {
             showErrorMessage(commit, error);
         }

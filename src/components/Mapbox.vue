@@ -7,6 +7,11 @@
 <script>
 import mapboxgl from "mapbox-gl";
 import { mapGetters } from "vuex";
+import {
+    PLUS_ONE_COUNT_SHOW_LOADING_ICON,
+    MINUS_ONE_COUNT_SHOW_LOADING_ICON,
+    SET_ZERO_SHOW_LOADING_ICON,
+} from "../store/mutation-types";
 
 export default {
     name: "Mapbox",
@@ -14,29 +19,22 @@ export default {
         return {
             accessToken:
                 "pk.eyJ1IjoibnRuaGFuIiwiYSI6ImNsYXAyeWQyMjBvZGgzbm9heHU4cWYxdmkifQ.IxgCYC6GbP5CvHcOqDWyng",
-            coordinates: [
-                [-67.13734, 45.13745],
-                [-66.96466, 44.8097],
-                [-68.03252, 44.3252],
-                [-69.06, 43.98],
-                [-70.11617, 43.68405],
-                [-70.64573, 43.09008],
-                [-70.75102, 43.08003],
-                [-70.79761, 43.21973],
-                [-70.98176, 43.36789],
-                [-70.94416, 43.46633],
-                [-71.08482, 45.30524],
-                [-70.66002, 45.46022],
-                [-70.30495, 45.91479],
-                [-70.00014, 46.69317],
-                [-69.23708, 47.44777],
-                [-68.90478, 47.18479],
-                [-68.2343, 47.35462],
-                [-67.79035, 47.06624],
-                [-67.79141, 45.70258],
-                [-67.13734, 45.13745],
-            ],
+            coordinates: [],
+            coordinates2: [],
+            mapPolygons: [],
+            mapBox: null,
         };
+    },
+
+    created() {
+        // mapboxgl.accessToken = this.accessToken;
+        // this.mapBox = new mapboxgl.Map({
+        //     container: "mapContainer",
+        //     style: "mapbox://styles/mapbox/streets-v12",
+        //     center: center,
+        //     zoom: 14,
+        // });
+
     },
 
     mounted() {
@@ -44,16 +42,41 @@ export default {
             aoNuoiId: 1,
             user: this.getUser,
         });
+
+        this.$store.dispatch("getVungNuoiByIdAsync", {
+            vungNuoiId: 1,
+            user: this.getUser,
+        });
+
+        this.plusOneToShowIconLoading();
+        setTimeout(() => {
+            this.minusOneToShowIconLoading()
+        }, "5000");
     },
 
     watch: {
         getAoNuoi() {
-            if (this.getAoNuoi) {
-                const coordinates = this.getAoNuoi.listOfPoint.map(
+            try {
+                if (this.getAoNuoi) {
+                    const coordinates = this.getAoNuoi.listOfPoint.map(
+                        (e) => e.coordinates,
+                    );
+                    this.mapPolygons.push(coordinates);
+                    this.renderMapboxPolygon();
+                }
+            } finally {
+                // setTimeout( this.minusOneToShowIconLoading(), 5000);
+                // this.minusOneToShowIconLoading();
+            }
+        },
+
+        getVungNuoi() {
+            if (this.getVungNuoi) {
+                const coordinates = this.getVungNuoi.listOfPoint.map(
                     (e) => e.coordinates,
                 );
-                this.coordinates = coordinates;
-                this.renderMapboxPolygon(this.coordinates, this.coordinates[0]);
+                this.mapPolygons.push(coordinates);
+                this.renderMapboxPolygon();
             }
         },
     },
@@ -63,18 +86,17 @@ export default {
             getUser: "getUser",
             isOpenDialogSignup: "isOpenDialogSignup",
             getAoNuoi: "getAoNuoi",
+            getVungNuoi: "getVungNuoi",
         }),
     },
 
     methods: {
-        renderMapboxPolygon(coordinates, centerInput) {
-            let center = centerInput || [-67.13734, 45.13745];
+        renderMapboxPolygon() {
             mapboxgl.accessToken = this.accessToken;
-
             const map = new mapboxgl.Map({
                 container: "mapContainer",
                 style: "mapbox://styles/mapbox/streets-v12",
-                center: center,
+                center: this.mapPolygons?.[0]?.[0] || [0, 0],
                 zoom: 14,
             });
 
@@ -85,9 +107,11 @@ export default {
                     data: {
                         type: "Feature",
                         geometry: {
+                            // type: "Polyline",
                             type: "Polygon",
                             // These coordinates outline Maine.
-                            coordinates: [coordinates],
+                            coordinates: this.mapPolygons,
+                            // coordinates: [this.coordinates,this.coordinates2],
                         },
                     },
                 });
@@ -115,6 +139,20 @@ export default {
                     },
                 });
             });
+        },
+
+        plusOneToShowIconLoading() {
+            this.$store.commit(PLUS_ONE_COUNT_SHOW_LOADING_ICON);
+            console.log("plusOneToShowIconLoading called");
+        },
+
+        minusOneToShowIconLoading() {
+            this.$store.commit(MINUS_ONE_COUNT_SHOW_LOADING_ICON);
+            console.log("minusOneToShowIconLoading called");
+        },
+
+        setZeroToHideIconLoading() {
+            this.$store.commit(SET_ZERO_SHOW_LOADING_ICON);
         },
     },
 };

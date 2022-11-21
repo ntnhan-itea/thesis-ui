@@ -44,6 +44,10 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <v-overlay :value="this.getCountToShowIconLoading > 0" z-index="99999999">
+            <v-progress-circular :size="100" :width="10" color="#02a9f7" indeterminate></v-progress-circular>
+        </v-overlay>
     </div>
 </template>
 
@@ -73,6 +77,7 @@ export default {
         },
         newUsername: "Wrong username",
         newPassword: "Wrong password",
+        isShowIconLoading: false,
     }),
 
     created() {
@@ -97,6 +102,12 @@ export default {
         isOpenDialogSignup() {
             this.showDialogConfirmSignup = this.isOpenDialogSignup || false;
         },
+
+        getCountToShowIconLoading() {
+            // this.isShowIconLoading = false;
+            // this.isShowIconLoading = this.getCountToShowIconLoading > 0;
+            console.log("this.getCountToShowIconLoading: ", this.getCountToShowIconLoading);
+        },
     },
 
     computed: {
@@ -104,6 +115,7 @@ export default {
             getUser: "getUser",
             getDialogMessage: "getDialogMessage",
             isOpenDialogSignup: "isOpenDialogSignup",
+            getCountToShowIconLoading: "getCountToShowIconLoading",
         }),
     },
 
@@ -186,4 +198,5 @@ export default {
   .v-snack__content
     text-align: center !important
     font-size: 1rem !important
+
 </style>

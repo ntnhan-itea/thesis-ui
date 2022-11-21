@@ -7,4 +7,6 @@ export const state = {
     },
     isOpenDialogSignup: false,
     aoNuoi: null,
+    vungNuoi: null,
+    countToShowIconLoading: 0,
 };

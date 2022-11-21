@@ -28,6 +28,16 @@ export function getAoNuoiById(aoNuoiId, user) {
   });
 }
 
+export function getVungById(id, user) {
+  let url = `/vung-nuoi/get-by-id/${id}`;
+
+  return axios({
+    method: 'POST',
+    url: url,
+    data: JSON.stringify(user),
+  });
+}
+
 export function signupAdminUser(user) {
   let url = '/admin';
 

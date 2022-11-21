@@ -41,6 +41,13 @@ export const getters = {
     getAoNuoi: (state) => {
         return state.aoNuoi;
     },
+    getVungNuoi: (state) => {
+        return state.vungNuoi;
+    },
+    getCountToShowIconLoading: (state) => {
+        console.log("state.countToShowIconLoading: ",state.countToShowIconLoading);
+        return state.countToShowIconLoading;
+    },
     // getUser: () => {
     //     return localStorage.getItem('userLogin') ? JSON.parse(localStorage.getItem('userLogin')) : null;
     // },
