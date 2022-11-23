@@ -1,12 +1,16 @@
 <template>
-    <v-container fill-height>
-        <div id="mapContainer" class="basemap"></div>
-    </v-container>
+    <div>
+        <v-container fill-height class="map-box-container">
+            <div id="mapContainer" class="basemap"></div>
+        </v-container>
+        <thesis-filter @renderMapOfTraiNuoi="renderMapOfTraiNuoi" />
+    </div>
 </template>
 
 <script>
 import mapboxgl from "mapbox-gl";
 import { mapGetters } from "vuex";
+import ThesisFilter from "./ThesisFilter.vue";
 import {
     PLUS_ONE_COUNT_SHOW_LOADING_ICON,
     MINUS_ONE_COUNT_SHOW_LOADING_ICON,
@@ -15,6 +19,11 @@ import {
 
 export default {
     name: "Mapbox",
+
+    components: {
+        ThesisFilter,
+    },
+
     data() {
         return {
             accessToken:
@@ -23,6 +32,7 @@ export default {
             coordinates2: [],
             mapPolygons: [],
             mapBox: null,
+            latestCenter: [105.76907878712353, 10.028333731381522],
         };
     },
 
@@ -34,7 +44,6 @@ export default {
         //     center: center,
         //     zoom: 14,
         // });
-
     },
 
     mounted() {
@@ -48,36 +57,38 @@ export default {
             user: this.getUser,
         });
 
+        this.renderMapboxPolygon();
+
         this.plusOneToShowIconLoading();
         setTimeout(() => {
-            this.minusOneToShowIconLoading()
-        }, "5000");
+            this.minusOneToShowIconLoading();
+        }, "1000");
     },
 
     watch: {
         getAoNuoi() {
-            try {
-                if (this.getAoNuoi) {
-                    const coordinates = this.getAoNuoi.listOfPoint.map(
-                        (e) => e.coordinates,
-                    );
-                    this.mapPolygons.push(coordinates);
-                    this.renderMapboxPolygon();
-                }
-            } finally {
-                // setTimeout( this.minusOneToShowIconLoading(), 5000);
-                // this.minusOneToShowIconLoading();
-            }
+            // if (this.getAoNuoi) {
+            //     const coordinates = this.getAoNuoi.listOfPoint.map(
+            //         (e) => e.coordinates,
+            //     );
+            //     this.mapPolygons.push(coordinates);
+            //     this.renderMapboxPolygon();
+            // }
         },
 
         getVungNuoi() {
-            if (this.getVungNuoi) {
-                const coordinates = this.getVungNuoi.listOfPoint.map(
-                    (e) => e.coordinates,
-                );
-                this.mapPolygons.push(coordinates);
-                this.renderMapboxPolygon();
-            }
+            // if (this.getVungNuoi) {
+            //     const coordinates = this.getVungNuoi.listOfPoint.map(
+            //         (e) => e.coordinates,
+            //     );
+            //     this.mapPolygons.push(coordinates);
+            //     this.renderMapboxPolygon();
+            // }
+        },
+
+        getListTraiNuois() {
+            // if(this.getListTraiNuois && this.getListTraiNuois.length > 0) {
+            // }
         },
     },
 
@@ -87,17 +98,24 @@ export default {
             isOpenDialogSignup: "isOpenDialogSignup",
             getAoNuoi: "getAoNuoi",
             getVungNuoi: "getVungNuoi",
+            getListTraiNuois: "getListTraiNuois",
         }),
     },
 
     methods: {
         renderMapboxPolygon() {
             mapboxgl.accessToken = this.accessToken;
+            // this.latestCenter = this.mapPolygons?.[0]?.[0] || this.latestCenter;
+            // const center =  this.latestCenter;
+            const center = this.mapPolygons?.[0]?.[0] || this.latestCenter;
+
+            const coordinates = this.mapPolygons;
+
             const map = new mapboxgl.Map({
                 container: "mapContainer",
                 style: "mapbox://styles/mapbox/streets-v12",
-                center: this.mapPolygons?.[0]?.[0] || [0, 0],
-                zoom: 14,
+                center: center,
+                zoom: 12,
             });
 
             map.on("load", () => {
@@ -110,7 +128,7 @@ export default {
                             // type: "Polyline",
                             type: "Polygon",
                             // These coordinates outline Maine.
-                            coordinates: this.mapPolygons,
+                            coordinates: coordinates,
                             // coordinates: [this.coordinates,this.coordinates2],
                         },
                     },
@@ -154,11 +172,48 @@ export default {
         setZeroToHideIconLoading() {
             this.$store.commit(SET_ZERO_SHOW_LOADING_ICON);
         },
+
+        renderMapOfTraiNuoi(traiNuoi) {
+            console.log({ traiNuoi });
+            
+            if (!traiNuoi) {
+                return;
+            }
+
+            this.mapPolygons = [];
+            const vungNuoiPoints = traiNuoi.vungNuois
+                .filter((e) => e?.listOfPoint)
+                .map((e) => e.listOfPoint.map((e) => e.coordinates));
+
+            this.mapPolygons = [...vungNuoiPoints];
+
+            const aoNuoiPoints = traiNuoi.vungNuois
+                .filter((vungNuoi) => vungNuoi?.aoNuois)
+                .map((vungNuoi) =>
+                    vungNuoi.aoNuois
+                        .filter((aoNuoi) => aoNuoi?.listOfPoint)
+                        .map((aoNuoi) =>
+                            aoNuoi.listOfPoint.map(
+                                (point) => point.coordinates,
+                            ),
+                        ),
+                );
+
+            aoNuoiPoints.forEach(
+                (e) => (this.mapPolygons = [...this.mapPolygons, ...e]),
+            );
+
+            this.renderMapboxPolygon();
+        },
     },
 };
 </script>
 
 <style lang="scss" scoped>
+.map-box-container {
+    margin-left: 0%;
+}
+
 .basemap {
     width: 100%;
     height: 100vh;

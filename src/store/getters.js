@@ -45,8 +45,10 @@ export const getters = {
         return state.vungNuoi;
     },
     getCountToShowIconLoading: (state) => {
-        console.log("state.countToShowIconLoading: ",state.countToShowIconLoading);
         return state.countToShowIconLoading;
+    },
+    getListTraiNuois: (state) => {
+        return state.listTraiNuois;
     },
     // getUser: () => {
     //     return localStorage.getItem('userLogin') ? JSON.parse(localStorage.getItem('userLogin')) : null;

@@ -8,6 +8,7 @@ import {
     PLUS_ONE_COUNT_SHOW_LOADING_ICON,
     SET_ZERO_SHOW_LOADING_ICON,
     MINUS_ONE_COUNT_SHOW_LOADING_ICON,
+    SET_ALL_TRAI_NUOIS,
 } from "./mutation-types";
 
 export const mutations = {
@@ -38,5 +39,8 @@ export const mutations = {
     },
     [SET_ZERO_SHOW_LOADING_ICON](state) {
         state.countToShowIconLoading = 0;
+    },
+    [SET_ALL_TRAI_NUOIS](state, traiNuois) {
+        state.listTraiNuois = traiNuois;
     },
 };

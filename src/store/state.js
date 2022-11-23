@@ -9,4 +9,5 @@ export const state = {
     aoNuoi: null,
     vungNuoi: null,
     countToShowIconLoading: 0,
+    listTraiNuois: null,
 };

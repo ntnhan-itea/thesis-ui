@@ -57,6 +57,15 @@ export function getAllUsers() {
   });
 }
 
+export function getAllTraiNuois() {
+  let url = '/trai-nuoi/get-all';
+
+  return axios({
+    method: 'GET',
+    url: url,
+  });
+}
+
 export async function createEntity() {
   let url = '/employee/';
   return new Promise((resolve, reject) => {

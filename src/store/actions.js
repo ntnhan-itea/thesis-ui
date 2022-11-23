@@ -5,6 +5,7 @@ import {
     signupAdminUser,
     getAoNuoiById,
     getVungById,
+    getAllTraiNuois,
 } from "../services/ThesisService";
 
 import {
@@ -13,6 +14,7 @@ import {
     SET_DIALOG_MESSAGE,
     SET_AO_NUOI,
     SET_VUNG_NUOI,
+    SET_ALL_TRAI_NUOIS,
 } from "./mutation-types";
 
 function showErrorMessage(commit, error) {
@@ -107,8 +109,17 @@ export const actions = {
                 payload.user,
             );
             const vungNuoi = response.data;
-            console.log({vungNuoi});
             commit(SET_VUNG_NUOI, vungNuoi);
+        } catch (error) {
+            showErrorMessage(commit, error);
+        }
+    },
+
+    async getAllTraiNuoisAsync({ commit }) {
+        try {
+            const response = await getAllTraiNuois();
+            const traiNuois = response.data;
+            commit(SET_ALL_TRAI_NUOIS, traiNuois);
         } catch (error) {
             showErrorMessage(commit, error);
         }

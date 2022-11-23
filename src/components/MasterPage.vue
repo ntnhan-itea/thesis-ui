@@ -127,6 +127,8 @@ export default {
             this.newPassword =
                 this.accountRegister?.password || "Wrong password";
         });
+
+        this.$store.dispatch("getAllTraiNuoisAsync");
     },
 
     methods: {
