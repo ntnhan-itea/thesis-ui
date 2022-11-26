@@ -30,17 +30,31 @@ export default {
         };
     },
 
-    mounted() {},
+    mounted() {
+        if (this.getOptionShowMapBoxTraiNuoi) {
+            if (this.getOptionShowMapBoxTraiNuoi.isShow) {
+                this.selectTraiNuoi = this.getListTraiNuois.find(
+                    (e) => e.id === this.getOptionShowMapBoxTraiNuoi.traiNuoiId,
+                );
+
+                this.renderMapBaseOneOption();
+                // this.$store.commit(SET_OPTION_SHOW_MAP_TRAI_NUOI, {
+                //     isShow: false,
+                //     traiNuoiId: traiNuoiId,
+                // });
+            }
+        }
+    },
 
     computed: {
         ...mapGetters({
             getListTraiNuois: "getListTraiNuois",
+            getOptionShowMapBoxTraiNuoi: "getOptionShowMapBoxTraiNuoi",
         }),
     },
 
     methods: {
         renderMapBaseOneOption() {
-            console.log("this.selectTraiNuoi: ", this.selectTraiNuoi);
             this.$emit("renderMapOfTraiNuoi", this.selectTraiNuoi);
         },
     },

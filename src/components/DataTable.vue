@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div v-if="this.isReadyDataToShow">
         <v-data-table
             :headers="headers"
-            :items="getUsers"
+            :items="this.getListTraiNuois"
             item-key="name"
             class="elevation-1"
             :search="search"
@@ -15,61 +15,89 @@
                     class="mx-4"
                 ></v-text-field>
             </template>
-            <template>
-                <tr>
-                    <td></td>
-                    <td>
-                        <!-- <v-text-field
-                            v-model="calories"
-                            type="number"
-                            label="Less than"
-                        ></v-text-field> -->
-                    </td>
-                    <td colspan="4"></td>
-                </tr>
+
+            <!-- <template v-slot:header="{  headers  }">
+                <thead>
+                    <tr class="testtttttttttttt">
+                        <th v-for="item in headers" :key="item.value">
+                            {{ item.text }}asd
+                        </th>
+                    </tr>
+                </thead>
+            </template> -->
+
+            <template v-slot:body="{ items }">
+                <tbody>
+                    <tr
+                        v-for="item in items"
+                        :key="item.name"
+                        class="body-table-row"
+                    >
+                        <td>{{ item.tenTraiNuoi }}</td>
+                        <td>{{ item.dienThoai }}</td>
+                        <td>{{ item.hinhThucNuoi }}</td>
+                        <td>{{ item.doiTuongNuoi }}</td>
+                        <td>{{ item.dienTichNuoi }}</td>
+                        <td>{{ item.diaChi }}</td>
+                        <td
+                            class="custom-class-pointer"
+                            @click="redirectToMapBox('Mapbox', item.id)"
+                        >
+                            <iconify-icon
+                                icon="material-symbols:map-outline-sharp"
+                            ></iconify-icon>
+                        </td>
+                    </tr>
+                </tbody>
             </template>
+
+            <template v-slot:no-data> NO DATA HERE! </template>
         </v-data-table>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
+import { SET_OPTION_SHOW_MAP_TRAI_NUOI } from "../store/mutation-types";
 
 export default {
-    name: 'DataTable',
+    name: "DataTable",
 
     data() {
         return {
-            search: '',
-            calories: '',
+            search: "",
+            calories: "",
+            traiNuoiItems: null,
         };
     },
 
     computed: {
         ...mapGetters({
-            getUsers: 'getUsers',
+            getUsers: "getUsers",
+            getListTraiNuois: "getListTraiNuois",
         }),
+
+        isReadyDataToShow() {
+            return this.getListTraiNuois && this.getListTraiNuois.length > 0;
+        },
+
         headers() {
             return [
                 {
-                    text: 'Full Name',
-                    align: 'start',
-                    sortable: false,
-                    value: 'fullName',
+                    text: "Tên trại nuôi",
+                    align: "start",
+                    sortable: true,
+                    value: "tenTraiNuoi",
                 },
                 {
-                    text: 'username',
-                    value: 'username',
-                    // filter: (value) => {
-                    //     if (!this.calories) return true;
-
-                    //     return value < parseInt(this.calories);
-                    // },
+                    text: "Số điện thoại",
+                    value: "dienThoai",
                 },
-                { text: 'Gender', value: 'gender' },
-                { text: 'So Dien Thoai', value: 'soDienThoai' },
-                { text: 'Ten Trai Nuoi', value: 'tenTraiNuoi' },
-                { text: 'Dia Chi', value: 'diaChi' },
+                { text: "Hình Thức Nuôi", value: "hinhThucNuoi" },
+                { text: "Đối tượng nuôi", value: "doiTuongNuoi" },
+                { text: "Diện tích nuôi", value: "dienTichNuoi" },
+                { text: "Địa chỉ", value: "diaChi" },
+                { text: "Map" },
             ];
         },
     },
@@ -83,15 +111,34 @@ export default {
             return (
                 value != null &&
                 search != null &&
-                typeof value === 'string' &&
+                typeof value === "string" &&
                 value
                     .toString()
                     .toLocaleLowerCase()
                     .indexOf(search.toLocaleLowerCase()) !== -1
             );
         },
+
+        handleRouting: function (routingName) {
+            if (routingName == this.$route.name) return;
+            this.$router.push({ name: routingName });
+        },
+
+        redirectToMapBox(routingName, traiNuoiId) {
+            this.handleRouting(routingName);
+            this.$root.$emit("handleClickMenuHeader");
+
+            this.$store.commit(SET_OPTION_SHOW_MAP_TRAI_NUOI, {
+                isShow: true,
+                traiNuoiId: traiNuoiId,
+            });
+            // this.$root.$emit("handleShowMapBaseOnTraiNuoiId", traiNuoiId);
+        },
     },
 };
 </script>
 
-<style></style>
+<style lang="sass">
+.custom-class-pointer
+    cursor: pointer
+</style>

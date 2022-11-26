@@ -50,6 +50,9 @@ export const getters = {
     getListTraiNuois: (state) => {
         return state.listTraiNuois;
     },
+    getOptionShowMapBoxTraiNuoi: (state) => {
+        return state.optionShowMapBoxTraiNuoi;
+    },
     // getUser: () => {
     //     return localStorage.getItem('userLogin') ? JSON.parse(localStorage.getItem('userLogin')) : null;
     // },

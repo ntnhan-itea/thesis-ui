@@ -10,4 +10,8 @@ export const state = {
     vungNuoi: null,
     countToShowIconLoading: 0,
     listTraiNuois: null,
+    optionShowMapBoxTraiNuoi: {
+        isShow: false,
+        traiNuoiId: null,
+    },
 };

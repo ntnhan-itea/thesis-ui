@@ -33,6 +33,7 @@ export default {
             mapPolygons: [],
             mapBox: null,
             latestCenter: [105.76907878712353, 10.028333731381522],
+            count: 0,
         };
     },
 
@@ -47,22 +48,12 @@ export default {
     },
 
     mounted() {
-        this.$store.dispatch("getAoNuoiByIdAsync", {
-            aoNuoiId: 1,
-            user: this.getUser,
-        });
-
-        this.$store.dispatch("getVungNuoiByIdAsync", {
-            vungNuoiId: 1,
-            user: this.getUser,
-        });
-
         this.renderMapboxPolygon();
 
-        this.plusOneToShowIconLoading();
-        setTimeout(() => {
-            this.minusOneToShowIconLoading();
-        }, "1000");
+        // this.plusOneToShowIconLoading();
+        // setTimeout(() => {
+        //     this.minusOneToShowIconLoading();
+        // }, "1000");
     },
 
     watch: {
@@ -105,8 +96,7 @@ export default {
     methods: {
         renderMapboxPolygon() {
             mapboxgl.accessToken = this.accessToken;
-            // this.latestCenter = this.mapPolygons?.[0]?.[0] || this.latestCenter;
-            // const center =  this.latestCenter;
+            this.latestCenter = this.mapPolygons?.[0]?.[0] || this.latestCenter;
             const center = this.mapPolygons?.[0]?.[0] || this.latestCenter;
 
             const coordinates = this.mapPolygons;
@@ -174,8 +164,6 @@ export default {
         },
 
         renderMapOfTraiNuoi(traiNuoi) {
-            console.log({ traiNuoi });
-            
             if (!traiNuoi) {
                 return;
             }

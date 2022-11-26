@@ -27,6 +27,5 @@ export default {
     width: 100%;
     min-height: calc(100vh - 61px);
     position: relative;
-
 }
 </style>

@@ -137,7 +137,7 @@ export default {
             password: "",
             repeatPassword: "",
             phoneNumber: "",
-            fullName:"",
+            fullName: "",
         },
         error: false,
         isLoginMode: true,
@@ -199,8 +199,11 @@ export default {
                 .then(() => {
                     const routerName = this.$router?.name;
                     if (this.getUser) {
-                        if (routerName !== "Home")
+                        if (routerName !== "Home") {
                             this.$router.push({ name: "Home" });
+
+                            this.$root.$emit("handleClickMenuHeader");
+                        }
                     }
                 });
         },
@@ -222,7 +225,7 @@ export default {
                 this.showDialogMessage("Invalid phone number", true);
                 return;
             }
-            
+
             this.$root.$emit("OpenSignupConfirm", user);
 
             this.$store.commit(SET_OPEN_DIALOG_CONFIRM_SIGN_UP, {

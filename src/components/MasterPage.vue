@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- <the-header /> -->
         <router-view></router-view>
         <v-snackbar
             style="z-index: 9999; text-align: center"
@@ -45,14 +46,20 @@
             </v-card>
         </v-dialog>
 
-        <v-overlay :value="this.getCountToShowIconLoading > 0" z-index="99999999">
-            <v-progress-circular :size="100" :width="10" color="#02a9f7" indeterminate></v-progress-circular>
+        <v-overlay :value="this.isShowOverlay" z-index="99999999">
+            <v-progress-circular
+                :size="100"
+                :width="10"
+                color="#02a9f7"
+                indeterminate
+            ></v-progress-circular>
         </v-overlay>
     </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+// import TheHeader from "./TheHeader.vue";
 import {
     SET_OPEN_DIALOG_CONFIRM_SIGN_UP,
     SET_DIALOG_MESSAGE,
@@ -60,7 +67,7 @@ import {
 
 export default {
     name: "MasterPage",
-    components: {},
+    components: {  },
 
     data: () => ({
         responseSnackBarColor: "green",
@@ -106,7 +113,10 @@ export default {
         getCountToShowIconLoading() {
             // this.isShowIconLoading = false;
             // this.isShowIconLoading = this.getCountToShowIconLoading > 0;
-            console.log("this.getCountToShowIconLoading: ", this.getCountToShowIconLoading);
+            console.log(
+                "this.getCountToShowIconLoading: ",
+                this.getCountToShowIconLoading,
+            );
         },
     },
 
@@ -117,6 +127,10 @@ export default {
             isOpenDialogSignup: "isOpenDialogSignup",
             getCountToShowIconLoading: "getCountToShowIconLoading",
         }),
+
+        isShowOverlay() {
+            return this.getCountToShowIconLoading > 0;
+        },
     },
 
     mounted() {
@@ -200,5 +214,4 @@ export default {
   .v-snack__content
     text-align: center !important
     font-size: 1rem !important
-
 </style>

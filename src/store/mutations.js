@@ -9,6 +9,7 @@ import {
     SET_ZERO_SHOW_LOADING_ICON,
     MINUS_ONE_COUNT_SHOW_LOADING_ICON,
     SET_ALL_TRAI_NUOIS,
+    SET_OPTION_SHOW_MAP_TRAI_NUOI,
 } from "./mutation-types";
 
 export const mutations = {
@@ -42,5 +43,8 @@ export const mutations = {
     },
     [SET_ALL_TRAI_NUOIS](state, traiNuois) {
         state.listTraiNuois = traiNuois;
+    },
+    [SET_OPTION_SHOW_MAP_TRAI_NUOI](state, optionShowMapBoxTraiNuoi) {
+        state.optionShowMapBoxTraiNuoi = optionShowMapBoxTraiNuoi;
     },
 };

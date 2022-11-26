@@ -1,5 +1,5 @@
 <template>
-    <div class="application-nav-bar header d-flex" v-show="this.user">
+    <div class="application-nav-bar header" v-show="this.user">
         <v-tabs align-with-title>
             <v-tab
                 ref="btnHome"
@@ -67,19 +67,27 @@ export default {
             this.fullName = this.user.fullName;
         }
 
-        if (this.user) {
-            if (this.$route.name == "Home") {
-                this.$refs.btnHome.$el.click();
-            } else if (this.$route.name == "Mapbox") {
-                this.$refs.btnMapbox.$el.click();
-            }
-        }
+        this.handleClickMenuHeader();
+
+        this.$root.$on("handleClickMenuHeader", () => {
+            this.handleClickMenuHeader();
+        });
     },
 
     methods: {
         handleRouting: function (e) {
             if (e.target.dataset.routing == this.$route.name) return;
             this.$router.push({ name: e.target.dataset.routing });
+        },
+
+        handleClickMenuHeader() {
+            // if (this.user) {
+            if (this.$route.name == "Home") {
+                this.$refs.btnHome.$el.click();
+            } else if (this.$route.name == "Mapbox") {
+                this.$refs.btnMapbox.$el.click();
+            }
+            // }
         },
 
         logout: function () {
@@ -101,24 +109,24 @@ export default {
 $fontSize: 0.875rem
 $paddingHorizontal: 0.438rem
 .application-nav-bar
-  justify-content: flex-end
-  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%) !important
-
-  .navbar-item
-    min-width: 200px
     display: flex
-    align-items: center
     justify-content: flex-end
-    line-height: 31px
+    box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%) !important
+    .navbar-item
+        min-width: 200px
+        display: flex
+        align-items: center
+        justify-content: flex-end
+        line-height: 31px
 
 .logout-btn
-  display: flex
-  align-items: center
-  justify-content: flex-start
-  min-width: 100px
-  line-height: 31px
-  &
-    color: #0492d0
-    cursor: pointer
-    padding: 0 7px
+    display: flex !important
+    align-items: center
+    justify-content: flex-start
+    min-width: 100px
+    line-height: 31px
+    &
+        color: #0492d0
+        cursor: pointer
+        padding: 0 7px
 </style>
