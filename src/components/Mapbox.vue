@@ -193,6 +193,19 @@ export default {
 
             this.renderMapboxPolygon();
         },
+
+        // squareOfArea(coordinates) {
+        //     const linestring = {
+        //         type: "Feature",
+        //         geometry: {
+        //             type: "LineString",
+        //             coordinates: coordinates,
+        //         },
+        //     };
+        //     const square = turf.length(linestring);
+        //     console.log("SIZE:", turf.length(linestring));
+        //     return square;
+        // },
     },
 };
 </script>
