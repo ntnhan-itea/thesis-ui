@@ -9,7 +9,7 @@ export function getAllEntries() {
 }
 
 export function login(user) {
-  let url = '/user/login';
+  let url = '/admin/login';
 
   return axios({
     method: 'POST',
