@@ -155,8 +155,9 @@ export default {
         squareOfArea(coordinates) {
             const geometry = turf.polygon(coordinates) || 0;
             const square = turf.area(geometry) || 0;
+            const convertMeterToKilometerSquare = square / 1000000;
 
-            return square / 1000000;
+            return convertMeterToKilometerSquare;
         },
     },
 };

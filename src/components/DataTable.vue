@@ -97,7 +97,7 @@ export default {
                 { text: "Đối tượng nuôi", value: "doiTuongNuoi" },
                 { text: "Diện tích nuôi", value: "dienTichNuoi" },
                 { text: "Địa chỉ", value: "diaChi" },
-                { text: "Map" },
+                { text: "Map", sortable: false, },
             ];
         },
     },
