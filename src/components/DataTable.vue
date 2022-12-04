@@ -11,7 +11,7 @@
             <template v-slot:top>
                 <v-text-field
                     v-model="search"
-                    label="Search"
+                    label="Tìm Kiếm"
                     class="mx-4"
                 ></v-text-field>
             </template>
@@ -37,7 +37,6 @@
                         <td>{{ item.dienThoai }}</td>
                         <td>{{ item.hinhThucNuoi }}</td>
                         <td>{{ item.doiTuongNuoi }}</td>
-                        <td>{{ item.dienTichNuoi }}</td>
                         <td>{{ item.diaChi }}</td>
                         <td
                             class="custom-class-pointer"
@@ -95,7 +94,6 @@ export default {
                 },
                 { text: "Hình Thức Nuôi", value: "hinhThucNuoi" },
                 { text: "Đối tượng nuôi", value: "doiTuongNuoi" },
-                { text: "Diện tích nuôi", value: "dienTichNuoi" },
                 { text: "Địa chỉ", value: "diaChi" },
                 { text: "Map", sortable: false, },
             ];

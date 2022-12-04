@@ -6,14 +6,14 @@
                 @click="(e) => handleRouting(e)"
                 data-routing="Home"
                 style="text-transform: capitalize !important"
-                >Home</v-tab
+                >Trang chủ</v-tab
             >
             <v-tab
                 ref="btnMapbox"
                 @click="(e) => handleRouting(e)"
                 data-routing="Mapbox"
                 style="text-transform: capitalize !important"
-                >Map box</v-tab
+                >Bản đồ</v-tab
             >
         </v-tabs>
         <div class="d-flex">
