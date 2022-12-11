@@ -113,8 +113,8 @@ export default {
                 this.squareVungNuois = roundVungNuois;
             } catch (error) {
                 console.log({ error });
-                this.labelVungNuois = `Tổng diện tích 0 vùng nuôi (km^2)`;
-                this.squareVungNuois = 0;
+                // this.labelVungNuois = `Tổng diện tích 0 vùng nuôi (km^2)`;
+                // this.squareVungNuois = 0;
             }
         },
 
@@ -147,8 +147,8 @@ export default {
                 this.squareAoNuois = roundAoNuois;
             } catch (error) {
                 console.log({ error });
-                this.labelAoNuois = `Tổng diện tích 0 ao nuôi (km^2)`;
-                this.squareAoNuois = 0;
+                // this.labelAoNuois = `Tổng diện tích 0 ao nuôi (km^2)`;
+                // this.squareAoNuois = 0;
             }
         },
 
